@@ -1,0 +1,9 @@
+{
+  "haskell.formattingProvider": "none",
+  "[haskell]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": null
+    // "editor.defaultFormatter": "haskell.haskell"
+  },
+  "editor.formatOnSave": false
+}

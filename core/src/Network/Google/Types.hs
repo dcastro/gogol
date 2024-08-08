@@ -24,40 +24,41 @@
 --
 module Network.Google.Types where
 
-import Control.Exception.Lens       (exception)
-import Control.Lens
-import Control.Monad.Catch
-import Control.Monad.Trans.Resource
+import           Control.Exception.Lens       (exception)
+import           Control.Lens
+import           Control.Monad.Catch
+import           Control.Monad.Trans.Resource
 
-import Data.Aeson
-import Data.ByteString        (ByteString)
-import Data.Coerce
-import Data.Conduit
-import Data.Data
-import Data.DList             (DList)
-import Data.Foldable          (foldMap, foldl')
-import Data.String
-import Data.Semigroup
-import Data.Text              (Text)
-import Data.Text.Lazy.Builder (Builder)
+import           Data.Aeson
+import           Data.ByteString              (ByteString)
+import           Data.Coerce
+import           Data.Conduit
+import           Data.Data
+import           Data.DList                   (DList)
+import           Data.Foldable                (foldMap, foldl')
+import           Data.Semigroup
+import           Data.String
+import           Data.Text                    (Text)
+import           Data.Text.Lazy.Builder       (Builder)
 
-import GHC.Generics
-import GHC.TypeLits
+import           GHC.Generics
+import           GHC.TypeLits
 
-import Network.HTTP.Client (HttpException, RequestBody (..))
-import Network.HTTP.Media  hiding (Accept)
-import Network.HTTP.Types  hiding (Header)
+import           Network.HTTP.Client          (HttpException, RequestBody (..))
+import           Network.HTTP.Media           hiding (Accept)
+import           Network.HTTP.Types           hiding (Header)
 
-import Servant.API hiding (Stream)
+import           Servant.API                  hiding (Stream)
 
-import qualified Data.ByteString.Char8    as BS8
-import qualified Data.ByteString.Lazy     as LBS
-import qualified Data.CaseInsensitive     as CI
-import qualified Data.Conduit.Combinators as Conduit
-import qualified Data.DList               as DList
-import qualified Data.Text.Encoding       as Text
-import qualified Data.Text.Lazy.Builder   as Build
-import qualified Network.HTTP.Types       as HTTP
+import qualified Data.ByteString.Char8        as BS8
+import qualified Data.ByteString.Lazy         as LBS
+import qualified Data.CaseInsensitive         as CI
+import qualified Data.Conduit.Combinators     as Conduit
+import qualified Data.DList                   as DList
+import           Data.Kind                    (Type)
+import qualified Data.Text.Encoding           as Text
+import qualified Data.Text.Lazy.Builder       as Build
+import qualified Network.HTTP.Types           as HTTP
 
 data AltJSON   = AltJSON   deriving (Eq, Ord, Show, Read, Generic, Typeable)
 data AltMedia  = AltMedia  deriving (Eq, Ord, Show, Read, Generic, Typeable)
@@ -417,13 +418,13 @@ instance FromJSON a => FromStream JSON a where
             Right x -> pure $! Right x
 
 class GoogleRequest a where
-    type Rs     a :: *
+    type Rs     a :: Type
     type Scopes a :: [Symbol]
 
     requestClient :: a -> GClient (Rs a)
 
 class GoogleClient fn where
-    type Fn fn :: *
+    type Fn fn :: Type
 
     buildClient :: Proxy fn -> Request -> Fn fn
 
@@ -435,7 +436,7 @@ data Captures (s :: Symbol) a
 data CaptureMode (s :: Symbol) (m :: Symbol) a
     deriving (Typeable)
 
-data MultipartRelated (cs :: [*]) m
+data MultipartRelated (cs :: [Type]) m
     deriving (Typeable)
 
 instance ( ToBody c m
